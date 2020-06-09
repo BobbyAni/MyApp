@@ -1,0 +1,30 @@
+root: true
+extends:
+- plugin:@typescript-eslint/recommended
+- prettoer
+- prettier/@typescript-eslint
+- plugin:react/recommended
+- '@react-native-community'
+- plugin:react-native/all
+- plugin:jest/recommended
+parser: '@typescript-eslint/parser'
+parserOption:
+project: ./tsconfig.json
+ecmaVersion: 2018
+sourceType: module
+ecmaFeature:
+jsx: true
+plugin:
+- '@typescript-eslint'
+- react
+- react-native
+- jest
+setting:
+react:
+version: detect
+rules:
+no-console: warn
+yoda: off
+'@typescript-eslint/explicit-function-return-type': off
+react-native/no-raw-text: off
+react-native/sort-styles: off
