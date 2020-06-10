@@ -1,51 +1,23 @@
-#/.circleci/config.yml
-#refer: http://circleci.com/docs/2.1/language-javascript/
+# For a detailed guide to building and testing on iOS, read the docs:
+# https://circleci.com/docs/2.0/testing-ios/
+
 version: 2.1
 
-executors:
-node-Its:
-docker:
-- image: circleci/node:12.13
-working_directory: ~/repo
-
-commands:
-setup:
-steps:
-- checkout
--restore_cache:
-keys:
--vl-dependencies-{{checksum "package.json"}}
--vl-dependencies-
-
 jobs:
-build:
-executor: node-Its
-steps:
-- setup
-- run: yarn
-- save_cache:
-paths:
-- node_modules
-key: vl-dependencies-{{checksum "package.json"}}
+  build:
 
-test:
-executor: node-Its
-steps:
-- setup
-- run:
-command: |
-yarn type-check
-yarn lint
-yarn coverage
-- store_artifacts:
-path: ~/repo/coverage
+    macos:
+      xcode: 11.0.0 # Specify the Xcode version to use
 
-workflows:
-version: 2
-test:
-jobs:
-- build
-- test:
-requires:
-- build
+    steps:
+      - checkout
+      - run: pod install # Install CocoaPods dependencies
+      - run: fastlane scan # Run tests using Fastlane
 
+      # Collect XML test results data to show in the UI, and save the same XML
+      # files under test-results folder in the Artifacts tab
+      - store_test_results:
+          path: test_output
+      - store_artifacts:
+          path: test_output
+          destination: scan-output
